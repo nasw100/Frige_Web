@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+        {% block style %}
+            <link rel="stylesheet" type="text/css" href="{% static 'ratings.css' %}">
+        {% endblock %}
+        {% block content %}
+
+        <div class="wrap">
+            <h3>후기</h3>
+            <form method="post" action="review_modify_pro" name="review_modify_form" id="review_modify_form">
+                {% csrf_token %}
+                <input type="hidden" name="orderitem" value="{{orderitem}}" >
+                <input type="hidden" name="review" value="{{review}}" >
+                <input type="hidden" name="rate" id="rate" value="0"/>
+                <p class="title_star">리뷰를 수정하세요.</p>
+         
+                <div class="review_rating">
+                    <div class="warning_msg">별점</div>
+                    <div class="rating">
+                        {% for i in "x"|rjust:review.ratings %}
+                            <img src="../static/img/starrate.png" class="rating">
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="review_contents">
+                    <div class="warning_msg">5자 이상으로 작성해 주세요.</div>
+                    <textarea name="content" rows="10" cols="50" class="review_textarea" >{{review.content}}</textarea>
+                </div>   
+                <div class="cmd">
+                    <input class="frige-btn inputbutton" type="submit" value="작성">
+                    <input class="frige-btn-mid inputbutton" type="reset" value="취소">
+                    <input class="frige-btn-cancel inputbutton" type="button" value="목록" onclick="location='orderitem'">
+                </div>
+            </form>
+        </div>
+        
+        <script>
+            function Rating(){};
+            let rating = new Rating();
+                //상품평 작성 글자수 초과 체크 이벤트 리스너
+            document.querySelector('.review_textarea').addEventListener('keydown',function(){
+                //리뷰 400자 초과 안되게 자동 자름
+                let review = document.querySelector('.review_textarea');
+                let lengthCheckEx = /^.{400,}$/;
+                if(lengthCheckEx.test(review.value)){
+                    //400자 초과 컷
+                    review.value = review.value.substr(0,400);
+                }
+            });
+
+            //저장 전송전 필드 체크 이벤트 리스너
+            document.querySelector('#review_modify_form').addEventListener('submit', function(e){
+                //리뷰 5자 미만이면 메시지 표시
+                if(document.querySelector('.review_textarea').value.length < 5){
+                    rating.showMessage('review');
+                    e.preventDefault();
+                    return false;
+                }
+                //폼 서밋
+            });
+
+            Rating.prototype.showMessage = function(type){//경고메시지 표시
+                switch(type){
+                    case 'rate':
+                        //안내메시지 표시
+                        document.querySelector('.review_rating .warning_msg').style.display = 'block';
+                        //지정된 시간 후 안내 메시지 감춤
+                        setTimeout(function(){
+                            document.querySelector('.review_rating .warning_msg').style.display = 'none';
+                        },1000);            
+                        break;
+                    case 'review':
+                        //안내메시지 표시
+                        document.querySelector('.review_contents .warning_msg').style.display = 'block';
+                        //지정된 시간 후 안내 메시지 감춤
+                        setTimeout(function(){
+                            document.querySelector('.review_contents .warning_msg').style.display = 'none';
+                        },1000);    
+                        break;
+                }
+            }
+        </script>
+        {% endblock %}        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

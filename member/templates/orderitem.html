@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block title %}
+    Order {{memid}}
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="orders" name="id:{{order.id}}">
+                <tr>
+                    <th>Created</th>
+                    <td>{{order.created}}</td>
+                </tr>
+                <tr>
+                    <th>Customer</th>
+                    <td>{{order.order_name}}</td>
+                </tr>
+                <tr>
+                    <th>E-mail</th>
+                    <td>{{order.order_email}}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td style="width:70%">{{order.order_address}} {{order.order_detailAddress}} {{order.order_extraAddress}} {{order.postal_code}}</td>
+                </tr>
+                <tr>
+                    <th>Total Price</th>
+                    <td>{{order.get_total_price|floatformat:"0"}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-12">
+        <div class="row">
+        <table class="orderitem_table" name="id:{{order.id}}">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Review</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for orderitem in orderitems %}
+                <tr>
+                    <th>
+                        {{forloop.counter}}
+                    </th>
+                    <td>
+                        {{orderitem.product}}
+                    </td>
+                    <td>
+                        {{orderitem.price|floatformat:"0"}} 
+                    </td>
+                    <td>
+                        {{orderitem.quantity}}
+                    </td>
+                    <td>
+                        {{orderitem.price|mul:orderitem.quantity|floatformat:"0"}}
+                    </td>
+                    <td>
+                            {% for reviews in reviewed %}
+                                {% if reviews.0 == orderitem %}
+                                    {% if not reviews.1.orderitem_id == orderitem %}
+                                        <form method="POST" name="to_review_write" action="review_write">
+                                            {% csrf_token %}
+                                            <input type="submit" name="reviewing" class="site-btn" value="Create">
+                                            <input type="hidden" name="order" value="{{order}}">
+                                            <input type="hidden" name="orderitem" value="{{orderitem}}">
+                                        </form>
+                                    {% else %}
+                                        <form method="POST" name="to_review_modify" action="review_modify">
+                                            {% csrf_token %}
+                                            <input type="submit" name="reviewing" class="site-btn" style="background-color: #5e3705;" value="Modify">
+                                            <input type="hidden" name="order" value="{{order}}">
+                                            <input type="hidden" name="orderitem" value="{{orderitem}}">
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+
+                            {% endfor %}
+
+                    </td>
+                </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

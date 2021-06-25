@@ -1,0 +1,65 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+                <article style="border:solid; margin:2px">
+                    <form method="post">
+                        <!-- form 정보를 view의 write로 넘겨줘야 함 -->
+                        <div class="row" style="margin:3px">
+                            <div class="col-2" style="text-align: end;">제목</div>
+                            <div class="col-8">
+                                <input type="text" name="subject" style="width:100%">
+                            </div>
+                            <div class="col">
+                                <input type="submit" class="btn btn-primary btn-sm" name="write">
+                            </div>
+                        </div>
+                        <div class="row" style="margin:3px">
+                            <div class="col-2" style="text-align: end;">내용</div>
+                            <div class="col-8">
+                                <input type="text" name="content" style="width:100%; height:300px"  >
+                            </div>
+                        </div>
+                        <input type="hidden" name="memid" value="memid">
+                    </form>
+                </article>
+                    <!-- 리뷰게시판 -->
+    <div class="row">==
+        <div class="col-2"></div>
+        <div class="col-8">
+            <h4>리뷰</h4>
+            <article style="border:solid;">
+                {% if dtos.length == 0 %}
+                    리뷰가 없습니다
+                {% else %}
+
+                {% for dto in dtos %}
+                    <div class="row">
+                        <div class="col-4">
+                            <b> 작성자 : {{dto.writer}} </b>
+                        </div>
+                        <div class="col">
+                            <b> 작성일 : {{dto.regdate|date:"Y-m-d"}} </b>
+                        </div>              
+                    </div>
+                    <div class="row">
+                        <div class="colspan">
+                            <b> 평점 : {{dto.ratings}}</b>
+                        </div>
+                    </div>      
+                    <div class="row">
+                        <div class="colspan">
+                            <b> 제목 : {{dto.subject}}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="colspan">
+                            <p> 내용 : {{dto.content}}</p>
+                        </div>
+                    </div>  
+                {% endfor %}
+                {% endif %}
+            </article>
+        </div>
+    </div>
+{% endblock %}

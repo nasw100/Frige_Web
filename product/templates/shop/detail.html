@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block title %}
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ogani | Template</title>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+
+
+{% block content %}
+    <!-- Page Preloder -->
+    <!-- <div id="preloder">
+        <div class="loader"></div>
+    </div> -->
+
+
+
+    <!-- Product Details Section Begin -->
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__item">
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                            <img class="product__details__pic__item--large"
+                                src="{{product.image.url}}" alt="">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__text">
+                        <h3>{{product.name}}</h3>
+                        <div class="product__details__rating">
+                            {% for r in ratings_avg_int %}
+                                <i class="fa fa-star"></i>
+                            {% endfor %}
+                            {% if ratings_avg_mod.0 >= 0.75 %}
+                                <i class="fa fa-star"></i>
+                            {% elif ratings_avg_mod.0 >= 0.25 %}
+                                <i class="fa fa-star-half-o"></i>
+                            {% endif %}
+                            <span>( {{review_list|length}} )</span>
+                        </div>
+                        <div class="product__details__price">{{product.price|floatformat:'0'}} 원</div>
+                        <p>{{product.description}}</p>
+                        <form action="{% url 'basket:product_add' product.id %}" method="post">
+                            <div class="product__details__quantity">
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                        {{add_to_basket}}
+                                    </div>
+                                </div>
+                            </div>
+                                {% csrf_token %}
+                                {% if not product.stock == 0 %}
+                                <input type="submit" class="primary-btn" value="Add to Basket">
+                                {% else %}
+                                <b style="color: red;"> [Sold Out] </b>
+                                {% endif %}
+                        </form>
+                        <input type="button" class="frige-btn-mid" onclick="history.go(-1)" value="back">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                                    aria-selected="true">Description</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+                                    aria-selected="false">Information</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+                                    aria-selected="false">Reviews <span>({{review_list|length}})</span></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                <div class="product__details__tab__desc">
+                                    <h6>Products Infomation</h6>
+                                    <p>{{product.description|linebreaks}}</p>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                <div class="product__details__tab__desc">
+                                    <h6>Products Infomation</h6>
+                                    <p>{{product.meta_description|linebreaks}}</p>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                <div class="product__details__tab__desc">
+                                    <h6>Reviews</h6>
+                                    {% for reviews in review_list_on_pages %}
+                                    {% for review in reviews %}
+                                    <div  class="row">
+                                        <div style="width:100%;">
+                                            <table class="review_table" style="text-align:center; width:100%; margin: 20px;">
+                                                <thead>
+                                                    <th>항목</th>
+                                                    <th>내용</th>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <th>
+                                                        유저 ID
+                                                    </th>
+                                                    <td>
+                                                        {{review.writer.user_id}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        작성일
+                                                    </th>
+                                                    <td>
+                                                        {{review.created}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        평점
+                                                    </th>
+                                                    <td>                    
+                                                        <div class="product__details__rating" style="color:#ffc107;">
+                                                            {% for r in "x"|rjust:review.ratings %}
+                                                                <i class="fa fa-star"></i>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <trstyle="height:200px;">
+                                                    <th>
+                                                        리뷰
+                                                    </th>
+                                                    <td>
+                                                        {{review.content}}
+                                                    </td>
+                                                </tr>
+                                                    {% for replies in reply_list %}
+                                                    {% for reply in replies %}
+                                                        {% if reply.review.id == review.id %}
+                                                        <tr>
+                                                            <td>
+                                                                <b>답글 {{forloop.counter}}</b>
+                                                            </td>
+                                                            
+                                                            <td colspan="2">
+                                                                {{reply.reply}}
+                                                            </td>
+                                                        </tr>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            
+                                        </div>
+                                    </div>
+                                    <form method='post' action="{% url 'product:reply_write' %}">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-3"></div>
+                                            <div class="col-6">
+                                                <input type="text" id="reply_write" name="reply_write" class="reply_write" placeholder="답글을 달아주세요" style="width:100%;">
+                                                <input type="hidden" name="reply_review" value={{review}}>
+                                                <input type="hidden" name="get_url" value="{{request.path}}">
+                                            </div>
+                                            <div class="col-1">
+                                                <input type="submit" id="reply_submit" name="reply_submit" class="site-btn">
+                                            </div>
+                                        </div>
+                                    </form>
+                                
+                                    {% endfor %}
+                                    {% endfor %}
+                                    <div style="text-align: center;">
+                                        {% if startpage > pageblock %}
+                                        <a href="{{category.get_absolute_url}}?pagenum={{startpage|sub:pageblock}}">☜(ﾟヮﾟ☜)☜(ﾟヮﾟ☜)</a>
+                                        {% endif %}
+                                        {% for page in pages %}
+                                        {% if pagenum == page %}
+                                            <b>[{{page}}]</b>
+                                        {% endif %}
+                                        {% if pagenum != page %}
+                                            <a href="{{category.get_absolute_url}}?pagenum={{page}}">[{{page}}]</a>
+                                        {% endif %}
+                                        {% endfor %}
+                                        {% if endpage < pagecount %}
+                                        <a href="{{category.get_absolute_url}}?pagenum={{startpage|add:pageblock}}">(☞ﾟヮﾟ)☞(☞ﾟヮﾟ)☞ 
+                                        {% endif %}
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Product Details Section End -->
+
+
+
+
+{% endblock %}

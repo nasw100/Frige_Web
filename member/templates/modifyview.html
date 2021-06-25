@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div style="position:relative; left:50%; margin:50px 0 0 -256px; max-width:500px; font-size:12pt;">
+	<h2 style="text-align:center"> 회원정보 수정 </h2><br>
+	    <div class="alert alert-info alert-dismissable" style="color: #ffffff; background-color:#82D026" width:100px; >
+		<strong>*</strong> 표시된 것은 필수항목입니다
+	</div>
+
+	<form method="POST" name="modifyform" action="modifypro" action=" " onsubmit="return modifyform_check()">
+		<!-- localhost:8000/member/modify -->
+		{% csrf_token %}
+
+		<div class="form-group">
+			<label class="control-label">아이디*</label>
+			<div class="inputbox">
+				<input class="inputbox-input-70" type="text" value="{{ dto.user_id }}" readonly/ >
+			</div>
+		</div>
+
+			
+		<div class="form-group">
+			<div>
+				<label class="control-label">새 비밀번호*</label>
+				<div class="inputbox">
+				<input class="inputbox-input-70" type="password" name="password1" id="password1" placeholder="새 비밀번호"></div>
+				<div id="pwd1_error" style = "color:red;"></div><br>
+				<label class="control-label" >새 비밀번호 확인*</label>
+				<div class="inputbox">
+				<input class="inputbox-input-70" type="password" name="password2" id="password2" placeholder="새 비밀번호 확인">
+				<div id="pwd2_error" style = "color:red;"></div></div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div>
+				<label class="control-label">이름*</label>
+				<div class="inputbox">
+				<input class="inputbox-input-70" type="text" name="user_name" value="{{ dto.user_name }}" readonly/>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div>
+
+			</div>
+		</div>
+
+		<div class="form-group">
+		<label class="control-label">이메일*</label>
+			<div class ="inputbox">
+				<input type="email" class="inputbox-input-70" name="email" id="email" value="{{dto.email}}" readonly/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label" for="hp"> 전화번호 </label>
+		<div class ="inputbox">
+			<input type="tel" class="inputbox-input-70" name="hp" id="hp" value="{{dto.hp}}"> 
+		</div></div>
+
+		<div class="form-group">
+			<label class="control-label" for="sample6_postcode"> 우편번호* </label><br>
+			<div class="inputbox"> 
+				 <input type="text" class="inputbox-input-70" name="sample6_postcode" id="sample6_postcode" value="{{dto.postal_code}}" placeholder="우편번호" style="display:inline; width:367.4px;">
+            	<input type="button" class="inputbox-btn" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" style="margin-bottom:6px;"><br>
+			</div>
+		</div>
+		<div id="postcode_error" style = "color:red;"></div>
+		<div class="form-group">
+			<label class="control-label" for="sample6_address sample6_detailAddress sample6_extraAddress"> 주소* </label>
+            <input type="text" class="inputbox-input-100" name="sample6_address" id="sample6_address" value="{{dto.address}}" placeholder="주소">
+			<div id="address_error" style = "color:red;"></div>
+            <input type="text" class="inputbox-input-100" name="sample6_detailAddress" id="sample6_detailAddress" value="{{dto.detailAddress}}"placeholder="상세주소" style="margin-top:6px;">
+			<div id="detailAddress_error" style = "color:red;"></div>
+            <input type="text" class="inputbox-input-100" name="sample6_extraAddress" id="sample6_extraAddress" value="{{dto.extraAddress}}" placeholder="참고항목" style="margin-top:6px;">
+            <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+            <script>
+                function sample6_execDaumPostcode() {
+                    new daum.Postcode({
+                        oncomplete: function(data) {
+                            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+            
+                            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                            var addr = ''; // 주소 변수
+                            var extraAddr = ''; // 참고항목 변수
+            
+                            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                                addr = data.roadAddress;
+                            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                                addr = data.jibunAddress;
+                            }
+            
+                            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                            if(data.userSelectedType === 'R'){
+                                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                                    extraAddr += data.bname;
+                                }
+                                // 건물명이 있고, 공동주택일 경우 추가한다.
+                                if(data.buildingName !== '' && data.apartment === 'Y'){
+                                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                                }
+                                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                                if(extraAddr !== ''){
+                                    extraAddr = ' (' + extraAddr + ')';
+                                }
+                                // 조합된 참고항목을 해당 필드에 넣는다.
+                                document.getElementById("sample6_extraAddress").value = extraAddr;
+                            
+                            } else {
+                                document.getElementById("sample6_extraAddress").value = '';
+                            }
+            
+                            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                            document.getElementById('sample6_postcode').value = data.zonecode;
+                            document.getElementById("sample6_address").value = addr;
+                            // 커서를 상세주소 필드로 이동한다.
+                            document.getElementById("sample6_detailAddress").focus();
+                        }
+                    }).open();
+                }
+            </script>
+		</div>
+<br>
+		<div class="form-group" style="text-align:center; margin-top:20px;">
+			<input class="frige-btn" type="submit" id="modify_submit" value="수정">
+			<input class="frige-btn-mid" type="reset" value="리셋">
+			<input class="frige-btn-cancel" type="button" value="수정취소" onclick="history.go(-1)">
+		</div>			          
+	</form>
+</div>
+<script>
+
+	function modifyform_check() {
+
+		var password1 = document.getElementById("password1");
+		var password2 = document.getElementById("password2");
+		var pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+		var email = document.getElementById("email");
+		var postcode = document.getElementById("sample6_postcode");
+		var sample6_address = document.getElementById("sample6_address");
+		var sample6_detailAddress = document.getElementById("sample6_detailAddress");
+		var checkDetailAddress = /^[0-9|a-z|A-Z|가-힣]{1,150}$/;
+	
+		if (!password1.value || !password2.value) {
+			alert("비밀번호를 입력하세요.");
+			password1.focus();
+			return false;
+		};
+		if (password1.value != password2.value) {
+			alert("비밀번호를 확인하세요.");
+			user_id.focus();
+			return false;
+		};
+		if (!pwdCheck.test(password1.value && password2.value)) {
+			alert("비밀번호는 영문+숫자+특수문자 조합으로 8~25자리까지 사용할 수 있습니다.")
+			password1.focus();
+			return false;
+		};
+		if (!email.value) {
+			alert("이메일을 입력하세요.");
+			email.focus();
+			return false;
+		};
+		if (!sample6_postcode.value || !sample6_address.value) {
+			alert("우편번호 찾기를 하세요.");
+			sample6_postcode.focus();
+			return false;
+		};
+		if (!sample6_detailAddress.value) {
+			alert("상세주소를 입력하세요.");
+			sample6_detailAddress.focus();
+			return false;
+		};
+		if( !checkDetailAddress.test(sample6_detailAddress.value)){
+			alert( "상세주소를 다시 입력해주세요!" )
+			return false;
+		};
+	};
+
+	$(function(){
+
+		document.getElementById('password1').onkeyup = function() {
+			var msg = '',
+				password1 = $('#password1').val(),
+				pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+			if (password1 == ""){
+				msg = '비밀번호를 입력하세요';
+			} else if(!pwdCheck.test( $("input[name=password1]").val() ) ) {
+				msg = '비밀번호는 8~25자 영문+숫자+특수문자 조합으로만 가능합니다.';
+			};
+			document.getElementById('pwd1_error').textContent = msg;
+		};
+
+		document.getElementById('password2').onkeyup = function() {
+			var msg = '',
+				password1 = $('#password1').val(),
+				password2 = $('#password2').val()
+			if (password2 != password1){
+				msg = '비밀번호를 확인하세요';
+			} else if( password2 == "") {
+				msg = '비밀번호를 확인하세요';
+			};
+			document.getElementById('pwd2_error').textContent = msg;
+		};
+
+		document.getElementById('sample6_postcode').onkeyup = function() {
+			var msg = '',
+				postcode = $('#sample6_postcode').val()
+			if (postcode == ""){
+				msg = '우편번호 찾기를 하세요.';
+			}
+			document.getElementById('postcode_error').textContent = msg;
+		};
+
+		document.getElementById('sample6_address').onkeyup = function() {
+			var msg = '',
+				address = $('#sample6_address').val()
+			if (address == ""){
+				msg = '우편번호 찾기를 하세요.';
+			}
+			document.getElementById('address_error').textContent = msg;
+		};
+
+		document.getElementById('sample6_detailAddress').onkeyup = function() {
+			var msg = '',
+				detailAddress = $('#sample6_detailAddress').val(),
+				checkDetailAddress = /^[0-9|a-z|A-Z|가-힣]{1,150}$/
+			if (detailAddress == ""){
+				msg = '상세주소를 입력하세요.';
+			} else if(!checkDetailAddress.test( $("input[name=sample6_detailAddress]").val() ) ) {
+				msg = '주소에 특수문자를 사용할 수 없습니다.';
+			};
+			document.getElementById('detailAddress_error').textContent = msg;
+		};
+	});
+
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+

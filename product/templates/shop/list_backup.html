@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+
+{% block title %}Category Page
+{% endblock %}
+
+{% block content %} 
+<div class="row">
+    <div class="col-2">
+        <div class="list-group">
+            <a href="/" class="list-group-item {% if not current_category %}active{%endif%}">All</a>
+            {% for c in categories %} 
+            <a href="{{c.get_absolute_url}}" class="list-group-item {% if current_category.slug == c.slug %}active{%endif%}">{{c.category}}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="col">
+            <div class="alert alert-info" style="text-align:center">
+                {% if current_category %}{{current_category.name}}{% else %}AllProducts{% endif %}
+            </div>
+        </div>
+        {% if recommendedProducts %}
+        <div class="row alert alert-info">
+            <h4> 추천상품 </h4>
+            {% for recommendedProduct in recommendedProducts %}
+            <div style="width:20%;">
+                <b>{{recommendedProduct.product_id}}</b>
+                <div class="card">
+                    <form action="" method="POST" enctype="multipart/form-data" style="height:200px">
+                        {% csrf_token %}
+                        <img class="basket-img-top" src="{{recommendedProduct.image.url}}" alt="Product Image" width="100%" height="100%">
+                    </form>
+                    <div class="card-body" style='text-align: end;'>
+                        <h5 class="card-title">{{recommendedProduct.name}}</h5>
+                        {% if recommendedProduct.stock == 0 %}
+                        <b style="color: red;">[Sold Out]</b>
+                        {% endif %}
+                        <p class="card-text">{{recommendedProduct.description}}
+                            <span class="card-text">{{recommendedProduct.price|floatformat:'0'}} 원</span>
+                        </p>
+                        <a href="{{recommendedProduct.get_absolute_url}}" class="btn-primary" >상세정보</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <br>
+        {% endif %}
+        <div class="row">
+            {% if count != 0 %}
+                {% for product in products %}
+                    <input type="hidden" value="{{number|sub:forloop.counter0}}">
+                    <div class="col-3">
+                        <div class="card">
+                            <form action="" method="POST" enctype="multipart/form-data" style="height:300px">
+                                {% csrf_token %}
+                                <img class="basket-img-top" src="{{product.image.url}}" alt="Product Image" width="100%" height="100%">
+                            </form>
+                            <div class="card-body" style='text-align: end;'>
+                                <h5 class="card-title">
+                                    {% if product.stock == 0 %}
+                                    <b style="color: red;">[Sold Out]</b>
+                                    {% endif %} 
+                                    {{product.name}}                                 
+                                </h5>
+                                <p class="card-text">{{product.description}}
+                                    <span class="card-text">{{product.price|floatformat:'0'}} 원</span>
+                                </p>
+                                <a href="{{product.get_absolute_url}}" class="btn-primary" >상세정보</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+    <div style="text-align: center;">
+    {% if startpage > pageblock %}
+    <a href="{{category.get_absolute_url}}?pagenum={{startpage|sub:pageblock}}">☜(ﾟヮﾟ☜)☜(ﾟヮﾟ☜)</a>
+    {% endif %}
+    {% for page in pages %}
+    {% if pagenum == page %}
+        <b>[{{page}}]</b>
+    {% endif %}
+    {% if pagenum != page %}
+        <a href="{{category.get_absolute_url}}?pagenum={{page}}">[{{page}}]</a>
+    {% endif %}
+    {% endfor %}
+    {% if endpage < pagecount %}
+    <a href="{{category.get_absolute_url}}?pagenum={{startpage|add:pageblock}}">(☞ﾟヮﾟ)☞(☞ﾟヮﾟ)☞ 
+    {% endif %}
+    </div>
+{% endblock %}
+
+

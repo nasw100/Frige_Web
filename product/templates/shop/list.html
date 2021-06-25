@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Frige{% endblock %}
+
+{% block video %}
+    <div class="container">
+        <div class="videoAdd">
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/K8bwacJ5zl8?autoplay=1&mute=1&start=287" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+{{session_id}}
+    <!-- Recommend Section Begin -->
+    <section>
+        <div class="container">
+            <div class="col-lg-12 col-md-7">
+                {% if recommendedProducts %}
+                <div class="product__discount">
+                    <!-- <div class="section-title product__discount__title">
+                        <h4>Recommendation</h4>
+                    </div> -->
+                    <div class="row">
+                        <div class="product__discount__slider owl-carousel">
+                            {% for recommendedProduct in recommendedProducts %}
+                            <div class="col-lg-4">
+                                <div class="product__discount__item">
+                                    <div class="product__discount__item__pic set-bg"
+                                        data-setbg="{{recommendedProduct.image.url}}">
+                                        <div class="product__discount__percent">추천</div>
+                                        <ul class="product__item__pic__hover">
+                                            <li><a href="{{recommendedProduct.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="product__discount__item__text">
+                                        <span>{{recommendedProduct.category}}</span>
+                                        <h5><a href="{{recommendedProduct.get_absolute_url}}">{{recommendedProduct.name}}</a></h5>
+                                        <div class="product__item__price">{{recommendedProduct.price|floatformat:'0'}} 원</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    <!-- Recommend Section End -->
+
+
+    <!-- Featured Section Begin -->
+    <section class="featured spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>Featured Product</h2>
+                    </div>
+                    <div class="featured__controls">
+                        <ul>
+                            <li class="active" data-filter="*">All</li>
+                            <li data-filter=".korean">Korean</li>
+                            <li data-filter=".western">Western<li>
+                            <li data-filter=".japanese">Japanese</li>
+                            <li data-filter=".chinese">Chinese</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row featured__filter">
+                {% for product in products %}
+                {% if product.id == 12 %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mix japanese">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="{{product.image.url}}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="{{product.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
+                            <h5>{{product.price|floatformat:'0'}}원</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% for product in products %}
+                {% if product.id == 20 %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mix western">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="{{product.image.url}}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="{{product.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
+                            <h5>{{product.price|floatformat:'0'}}원</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% for product in products %}
+                {% if product.id == 33 %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mix chinese">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="{{product.image.url}}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="{{product.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
+                            <h5>{{product.price|floatformat:'0'}}원</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% for product in products %}
+                {% if product.id == 41 %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mix chinese">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="{{product.image.url}}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="{{product.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
+                            <h5>{{product.price|floatformat:'0'}}원</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% for product in products %}
+                {% if product.id == 52 %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mix korean">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="{{product.image.url}}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="{{product.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
+                            <h5>{{product.price|floatformat:'0'}}원</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% for product in products %}
+                {% if product.id == 74 %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mix korean">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="{{product.image.url}}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="{{product.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
+                            <h5>{{product.price|floatformat:'0'}}원</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% for product in products %}
+                {% if product.id == 71 %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mix korean">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="{{product.image.url}}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="{{product.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
+                            <h5>{{product.price|floatformat:'0'}}원</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% for product in products %}
+                {% if product.id == 19 %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mix western">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="{{product.image.url}}">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="{{product.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
+                            <h5>{{product.price|floatformat:'0'}}원</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- Featured Section End -->
+
+
+{% endblock %}
+
+

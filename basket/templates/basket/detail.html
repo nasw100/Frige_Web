@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+{% load mathfilters %}
+
+{% block title %}
+Shopping Basket
+{% endblock %}
+
+{% block content %}
+    <section class="breadcrumb-section set-bg" data-setbg="../static/img/breadcrumb.jpg" style="background-image: url('../static/img/breadcrumb.jpg');">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text" >
+                        <h2> BASKET </h2>
+                        <div class="breadcrumb__option">
+                            <a href="../">*Home</a>
+                            <span>Frige-to-Shopping</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+<section class="shoping__cart spad" > 
+	<div class="container">
+		<div class="row" >
+              <div class="col-lg-12">
+				    {% if hold %}
+					<div style="text-align: center;">
+						<br><b style="color: red;">{{hold}} 재고부족</b>
+					</div>
+				    {% endif %}
+				    <div class="shoping__cart__table">
+						<table class="shoping__cart__table">
+						    <thead>
+						        <tr>
+						            <th scope="col" class="shoping_product">Product</th>
+						            <th scope="col"></th>
+						            <th scope="col">Unit price</th>
+						            <th scope="col" >Quantity</th>
+						            <th scope="col">Remove</th>						            
+						            <th scope="col">Price</th>
+						        </tr>
+						    </thead>
+						    <tbody>
+						        {% for item in basket %}
+						        {% with product=item.product %}
+						        <tr style="height:200px">
+						            <th scope="row" style="width:18%;" style="vertical-align: middle;">
+						                <a href="{{ product.get_absolute_url }}">
+						                    <img src="{{ product.image.url }}" class="img-thumbnail" style="width:200px; height:200px" >
+						                </a>
+						            </th>
+						            <td><h5>{{ product.name }}</h5>
+						                {% if product.stock == 0 %}
+							                <b style="color:red">[Sold Out]</b>
+							                <input type="hidden" id="soldout" value="{{product.name}}">
+						                {% endif %}
+						            </td>
+						            <td class="shoping__cart__price">{{ item.price|floatformat:"0" }} 원</td>
+						            
+						            <td >
+						                <form action="{% url 'basket:product_add' product.id %}" method="post">
+											<div class="product__details__quantity">
+												<div class="quantity">
+													<div class="pro-qty" style="height:46px;">
+														{{ item.quantity_form.quantity }}
+						                    			{{ item.quantity_form.is_update }}
+													</div>
+												</div>
+											</div>
+						                    
+						                    <input type="submit" class="site-btn" value="Update">
+						                    {% csrf_token %}
+						                </form>
+						            </td>
+						            <td style="padding-top : 25px;">
+										<a class="site-btn" href="{% url 'basket:product_remove' product.id %}">Remove</a>
+									</td>						            
+						            <td class="shoping__cart__price">{{ item.total_price|floatformat:"0" }} 원</td>
+						        </tr>
+						        {% endwith %}
+						        {% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>	
+			<div class="row" >             	
+	              	<div class="col-lg-6">
+	                    <div class="shoping__continue">              
+					    	<a href='{% url "product:product_all" %}' class="primary-btn cart-btn ">Continue Shopping</a>
+	                    </div>
+	                </div>    	
+	                <div class="col-lg-6">         
+	                    <div class="shoping__checkout">
+	                    	<h5>CheckOut Detail</h5>
+							    <ul>
+							        <li class="shoping__cart__total">Total Price<span>{{ basket.get_product_total|floatformat:"0" }} 원</span></li>
+								</ul>                    		
+						        {% if memid %}
+						        <a href="{% url 'order:order_create' %}" class="primary-btn  disableLink" onclick="ok()">CheckOut</a>
+						        <script> 
+						            function ok(){
+						                var basket = "{{basket.basket}}";
+						                try{
+						                    var soldout = document.getElementById('soldout').value;
+						                }catch{
+						                    var soldout = 0
+						                }                
+						                var hold = '{{hold}}';
+						                if( basket.length == 2 ){
+						                    document.querySelector(".disableLink").removeAttribute( 'href' );
+						                    alert("장바구니에 상품이 없습니다.");
+						                };
+						                if( hold ) {
+						                    document.querySelector(".disableLink").removeAttribute( 'href' );
+						                    alert( hold + "의 재고가 부족합니다." );
+						                };
+						                if( soldout ) {
+						                    document.querySelector(".disableLink").removeAttribute( 'href' );
+						                    alert( soldout + "의 재고가 없습니다." ) ;
+						                };
+						            };
+						        </script>
+						        {% else %}
+						        <a href="{% url 'login' %}?next={{request.path}}" class="primary-btn ">CheckOut</a>
+						        {% endif %}	
+						</div>
+					</div>						        
+				
+			</div>
+	</div>
+</section> 
+{% endblock %}
+
+
+
+

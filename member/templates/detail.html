@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Order {{memid}}
+{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="orders" name="order_detail_personal_info">
+                <tr>
+                    <th>ID</th>
+                    <td>{{memid}}</td>
+                </tr>
+                <tr>
+                    <th colspan="2"  style="border-right: 2px solid #82D026;"><a href="#" onclick="window.print();">Print order</a></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+    {% for order in orders %}
+        <div class="col-lg-12">
+            <table class="orders" name="id:{{order.id}}">
+                <tr>
+                    <th rowspan=8 style="width:5%">{{forloop.revcounter}}</th>
+                </tr>
+                <tr>
+                    <th>Created</th>
+                    <td>{{order.created}}</td>
+                </tr>
+                <tr>
+                    <th>Product</th>
+                    <td>
+                    {% for orderitems in orderitem_list %}
+                        {% for orderitem in orderitems %}
+                            {% if orderitem.order == order %}
+                                {{orderitem.product}} ({{orderitem.quantity}}) <br>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Customer</th>
+                    <td>{{order.order_name}}</td>
+                </tr>
+                <tr>
+                    <th>E-mail</th>
+                    <td>{{order.order_email}}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td style="width:70%">{{order.order_address}} {{order.order_detail_address}} {{order.order_extra_address}} {{order.postal_code}}</td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td>{{order.get_total_price|floatformat:"0"}}</td>
+                </tr>
+                <tr>
+                    <th colspan="3" style="border-right: 2px solid #82D026;">
+                            <form method="POST" name="orderitem{{order.id}}" action="orderitem">
+                                {% csrf_token %}
+                                <input type="submit" name="orderitem" class="site-btn" value="상세정보">
+                                <input type="hidden" name="order" value="{{order}}">
+                            </form>
+                    </th>
+                </tr>
+            </table>
+        </div>
+
+
+
+    <br>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

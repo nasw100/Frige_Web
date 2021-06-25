@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<br><br>
+<div class="login-img">
+	<img class="login-img-detail" src="/static/img/logo3.png">
+</div>
+<br><br>
+	<form method="POST" name="passform" action="" style="margin:0px auto; max-width:500px;" font-size:12pt;">
+		{% csrf_token %}
+		<div class="container bootstrap snippets bootdey">
+		<h3> 프로필 수정 </h3>
+			<div class="form-group">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label>
+							{% if message %}
+							{{ message }}
+							{% endif %} 
+							{% if not message %}
+									*비밀번호를 입력하세요
+							{% endif %} 
+						</label>
+					</div>
+					<div class="form-group">
+						<label class="control-label">비밀번호:</label>
+						<input class="inputbox-input-100" type="password" name="password" >
+					</div>
+					<div class="form-group" style="text-align:center; margin-top:20px;">
+						<input class="frige-btn" type="submit" value="수정">
+						<input class="frige-btn-cancel" type="button" value="취소" onclick="location='profile'">
+					</div>
+				</form>
+			</div>
+		</div>   
+	</form>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

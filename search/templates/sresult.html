@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div>
+        <p class="text-center my_search_text" style="font-size:17pt;">You have searched for : <b>"{{query}}"</b></p>
+    </div>
+    <div class="container">
+        <div class="row mx-auto">
+        {% if query %}
+            {% for product in products %}
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="{{product.image.url}}">
+                        <ul class="product__item__pic__hover">
+                            <li><a href="{{product.get_absolute_url}}"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        {% if product.stock == 0 %}
+                        <b style="color: red;">[Sold Out]</b>
+                        {% endif %} 
+                        <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
+                        <h5>{{product.price|floatformat:'0'}} 원</h5>
+                    </div>
+                </div>
+            </div>
+                {% empty %}
+                <div class="row mx-auto">
+                    <p class="text-center my_search_text" style="font-size:17pt;">0 result found</p>
+                </div>>
+            {% endfor %}
+        {% else %}
+        <div class="row mx-auto">
+            <p class="text-center my_search_text" style="font-size:17pt;">0 result found</p>
+        </div>
+        {% endif %}   
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+ 
+{% block content %}
+<section>
+    {% if memid %} 
+    <div style="text-align:center;margin-top:50px">
+        <h2> My Page </h2>
+    </div>   
+    <div class="profile">
+            <div class="profile1">
+                <br><label style="font-size:20pt"><b>Profile</b></label><br>
+                <label><b>{{ memid }}</b>님 안녕하세요</label><br>
+                <br><br><br><br>
+                <input class="frige-btn" type="button" value="수정" onclick="location='modify'">
+            </div>
+            <div class="profile1">
+                <br><label style="font-size:20pt"><b>Order History</b></label><br>
+                <label>주문내역</label><br>
+                <br><br><br><br>
+                <input class="frige-btn-mid" type="button" value="조회" onclick="location='orderdetail'">
+            </div>
+            <div class="profile1">
+                <br><label style="font-size:20pt"><b>Withdrawal</b></label><br>
+                <label>회원탈퇴</label><br>
+                <br><br><br><br>
+                <input class="frige-btn-cancel" type="button" value="확인" onclick="location='delete'">
+            </div>
+    </div>
+              
+    {% endif %}
+
+    {% if not memid %}
+    <br><br>
+    <section>
+    <div class="login-img">
+        <img class="login-img-detail" src="/static/img/logo3.png">
+    </div>
+    </section>
+    <br><br>
+    <section>
+    <div class="login-form">
+        <form method="POST" action="" name="loginform">
+        {% csrf_token %}
+            <div class="form-group">
+            <label>User Name</label>
+            <input type="text" class="form-control" placeholder="User Name" name="user_id">
+            </div>
+            <div class="form-group">
+            {{message2}}
+            </div>
+            <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="Password" name="password">
+            </div>
+            <div class="form-group">
+            {{message1}}
+            </div>
+            <br>
+            <div style="text-align:center;">
+                <button class="frige-btn" type="submit" value="로그인" >Login</button>
+                <input type="hidden" name="next" value="{{ next }}">
+                <button class="frige-btn-mid" type="button" value="회원가입" onclick="location='register'">Register</button>
+                <button class="frige-btn-cancel" type="reset" value="취소">Cancel</button>
+                <br><br><br>
+            </div>
+        </form>
+    </div>
+    </section>	
+               
+    {% endif %}
+</section>
+{% endblock %}     
+
+
+
+
+
+
+
+
+
+
+
