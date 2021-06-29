@@ -18,7 +18,7 @@ class Member( models.Model ) :
     birth =  models.DateField( max_length=30, verbose_name="생년월일", null=True )
     gender = models.CharField( choices=GENDER_CHOICE, max_length=10, verbose_name="성별", null = False )
     email = models.EmailField( max_length=100, verbose_name="이메일", null=True, unique=True )
-    hp = models.CharField( max_length=15, verbose_name="핸드폰", null=True, unique=True)
+    hp = models.CharField( max_length=15, verbose_name="핸드폰", null=True )
     postal_code = models.CharField( max_length=10, verbose_name="우편번호")
     address = models.CharField( max_length=100, verbose_name="주소")
     detailAddress = models.CharField( max_length=100, verbose_name="상세주소")
