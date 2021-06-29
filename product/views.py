@@ -21,7 +21,8 @@ def home(request) :
         product['quantity_form'] = AddProductForm(initial={'quantity':product['quantity'], 'is_update':True})
     products = Product.objects.filter( available_display=True )        # 가능한 상품만 불러오기
     if memid :
-        recommendations = Recommendation.objects.filter( user_id = memid )
+        member = Member.objects.get( user_id = memid )
+        recommendations = Recommendation.objects.filter( user_id = member.id )
         recommendedProductId = []
         for recommendation in recommendations :
             recommendedProductId.append(recommendation.product_id )
@@ -90,7 +91,8 @@ def product_in_category(request, category_slug=None) :
 
     if current_category == None :
         if memid :
-            recommendations = Recommendation.objects.filter( user_id = memid )
+            member = Member.objects.get( user_id = memid )
+            recommendations = Recommendation.objects.filter( user_id = member.id )
             recommendedProductId = []
             for recommendation in recommendations :
                 recommendedProductId.append(recommendation.product_id )
