@@ -72,7 +72,7 @@ def register( request ) :
                 '<div style="font-size: 40px; width: 100%; height:100%; display:flex; text-align:center; '
                 'justify-content: center; align-items: center;">'
                 '입력하신 이메일<span>로 인증 링크가 전송되었습니다.</span>5초 후 자동으로 홈으로 돌아갑니다.'
-                '<meta http-equiv="refresh" content="5; url=http://192.168.10.9:8000/">'
+                '<meta http-equiv="refresh" content="5; url=../">'
                 '</div>'
             )
             #return redirect( "login" )
