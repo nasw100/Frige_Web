@@ -230,12 +230,11 @@ GRAPH_MODELS = {
   'group_models': True,
 }
 
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.naver.com'
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'lkh9092@gmail.com'
-EMAIL_HOST_PASSWORD = 'vyntasmyjmvenuij'
+EMAIL_HOST_USER = 'frige304@naver.com'
+EMAIL_HOST_PASSWORD = 'secret'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
 
 ALLOWED_HOSTS = [ '192.168.10.9', '127.0.0.1', 'localhost' ]
