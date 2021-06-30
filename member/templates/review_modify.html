@@ -16,7 +16,7 @@
                 <p class="title_star">리뷰를 수정하세요.</p>
          
                 <div class="review_rating">
-                    <a href="{{orderitem.product.get_absolute_url}}">{{orderitem.product}}</a>
+                    <a href="{{orderitem.product.get_absolute_url}}" style="color:black;">{{orderitem.product}}</a>
                     <div class="warning_msg">별점</div>
                     <div class="rating">
                         {% for i in "x"|rjust:review.ratings %}
